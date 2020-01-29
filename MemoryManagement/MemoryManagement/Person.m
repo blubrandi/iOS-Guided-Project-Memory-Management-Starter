@@ -11,26 +11,26 @@
 #import "LSILog.h"
 
 @implementation Person
-
 - (instancetype)initWithCar:(Car *)car {
-	self = [super init];
-	if (self) {
-		NSLog(@"Person.init: %@", _car);
-        // TODO: Implement initWithCar with MRC
-        _car = car;
-	}
-	return self;
+    self = [super init];
+    if (self) {
+        _car = [car retain]; // +1 retain count of car
+        NSLog(@"Person.init: %@", _car);
+    }
+    return self;
 }
-
 - (void)dealloc {
-    // TODO: Implement dealloc with MRC (order is important)
-
     NSLog(@"Person.dealloc: %@", _car);
+    [_car release];
+    _car = nil;
+    [super dealloc];
 }
-
 // TODO: Implement setCar with MRC
 - (void)setCar:(Car *)car {
-    _car = car;
+    // What do I need to do here?
+    if (car != _car) {
+        [_car release];
+        _car = [car retain];
+    }
 }
-
 @end
